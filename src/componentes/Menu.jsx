@@ -1,8 +1,26 @@
-import React from 'react'
+import React ,{useEffect, useState} from 'react'
 import{Link} from 'react-router-dom'
 import boostrap from 'bootstrap/dist/css/bootstrap.min.css'
+import { auth } from '../firebaseConfig'
 
 const Menu = () => {
+
+    const [usuario,setUsuario] = useState(null)
+    useEffect( ()=>{ //useEffect genera una ccion una vez se haya terminado de ejecutar el render
+        auth.onAuthStateChanged((user)=>{
+            if(user){
+                setUsuario(user.email)
+            }
+        })
+    },[])
+
+    const CerrarSesion = ()=>{
+        auth.signOut()
+        setUsuario(null)
+    }
+
+
+
     return(
         <div className="navbar navbar-expand-lg navbar-dark bg-dark">
             <nav>
@@ -17,6 +35,17 @@ const Menu = () => {
                         <Link to='/admin' className='nav-link'>Admin</Link>
                     </li>
                 </ul>
+                {
+                    usuario?
+                    (<button
+                        onClick={CerrarSesion}
+                        className="btn btn-danger"
+                    >Cerrar sesion</button>)
+                    :
+                    (
+                        <span></span>
+                    )
+                }
             </nav>
         </div>
     )
