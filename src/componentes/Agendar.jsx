@@ -10,18 +10,20 @@ const Agendar =  () => {
     const[error, setError] = useState(null)
     const[dispName, setDispName] = useState('')
     const[dispPhone, setDispPhone] = useState('')
-    const[successName, setSuccessName] = useState(null)
+    const[OKName, setOKName]=useState('')
+    
 
     const AgendarCont = async (e) =>{
         e.preventDefault()
         setError(null)
-        setName(dispName) //seteo el name a travez de dispName para que se muestre en el display (dispNAme) y para que el name quede definido de una vez para luego enviarlo a la base de datos externa 
+        // setName(dispName) //seteo el name a travez de dispName para que se muestre en el display (dispNAme) y para que el name quede definido de una vez para luego enviarlo a la base de datos externa 
         setPhone(dispPhone)
-        setSuccessName(dispName)
-        if(dispName.trim()==''){
+        
+        
+        if(dispName.trim()===''){
             setError("Ingresar un nombre pro favor")
         }
-        else if(dispPhone.trim()==''){
+        else if(dispPhone.trim()===''){
             setError('Por favor ingresar un numero de telefono')
         }
         else {
@@ -35,10 +37,12 @@ const Agendar =  () => {
         }
 
         try{
-            const data=await store.collection('Agenda').add(addUser)
+            const data = await store.collection('Agenda').add(addUser);
             console.log('tarea completada co exito');
-        }catch(e){
-            console.log(e);
+            console.log(name);
+            console.log(phone);
+        }catch(er){
+            console.log(er);
         }
 
 
@@ -48,6 +52,7 @@ const Agendar =  () => {
         
         setDispName('')//variable secundaria para mostrar en el display y que se reinicie con el enviar
         setDispPhone('')//variable secundaria para mostrar en el display y que se reinicie con el enviar   
+        setOKName(name)
         
         console.log(name);
         
@@ -60,14 +65,16 @@ const Agendar =  () => {
                     <h2>Agendar contacto</h2>
                     <input
                         onChange={(e)=>{//setName(e.target.value);
-                                        setDispName(e.target.value)}}
+                                        setDispName(e.target.value)
+                                        setName(dispName)}}
                         className="form-control mt-3"
                         placeholder="Insertar Nombre"
                         value={dispName}
                         />
                     <input
                         onChange={(e)=>{//setPhone(e.target.value);
-                                        setDispPhone(e.target.value)}}
+                                        setDispPhone(e.target.value)
+                                        setPhone(dispPhone)}}
                         className="form-control mt-3"
                         placeholder="Insertar Numero"
                         value={dispPhone}
@@ -85,7 +92,7 @@ const Agendar =  () => {
                                 error ==='Agendado' ?
                                 (
                                     <div className="alert alert-success mt-3" role="alert">
-                                        {successName} ha sido agendado
+                                        {OKName} ha sido agendado
                                     </div>
                                 )
                                 :
