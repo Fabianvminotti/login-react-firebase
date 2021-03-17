@@ -3,27 +3,53 @@ import { store } from '../firebaseConfig'
 
 
 
-const Agendar = () => {
+const Agendar =  () => {
 
     const[name, setName] = useState('')
     const[phone,setPhone] = useState('')
     const[error, setError] = useState(null)
-    const[dispName, setDispName] = useState(null)
-    const[dispPhone, setDispPhone] = useState(null)
+    const[dispName, setDispName] = useState('')
+    const[dispPhone, setDispPhone] = useState('')
+    const[successName, setSuccessName] = useState(null)
 
-    const Agendar = (e) =>{
+    const AgendarCont = async (e) =>{
         e.preventDefault()
         setError(null)
-        if(name.trim()==''){
+        setName(dispName) //seteo el name a travez de dispName para que se muestre en el display (dispNAme) y para que el name quede definido de una vez para luego enviarlo a la base de datos externa 
+        setPhone(dispPhone)
+        setSuccessName(dispName)
+        if(dispName.trim()==''){
             setError("Ingresar un nombre pro favor")
         }
-        if(phone.trim()==''){
+        else if(dispPhone.trim()==''){
             setError('Por favor ingresar un numero de telefono')
         }
+        else {
+            setError('Agendado')
+        }
 
+
+        const addUser = {
+            nombre:name,
+            telefono:phone
+        }
+
+        try{
+            const data=await store.collection('Agenda').add(addUser)
+            console.log('tarea completada co exito');
+        }catch(e){
+            console.log(e);
+        }
+
+
+
+
+
+        
         setDispName('')//variable secundaria para mostrar en el display y que se reinicie con el enviar
         setDispPhone('')//variable secundaria para mostrar en el display y que se reinicie con el enviar   
-
+        
+        console.log(name);
         
     }
 
@@ -33,35 +59,47 @@ const Agendar = () => {
                 <div className="col p-5">
                     <h2>Agendar contacto</h2>
                     <input
-                        onChange={(e)=>{setName(e.target.value);
+                        onChange={(e)=>{//setName(e.target.value);
                                         setDispName(e.target.value)}}
                         className="form-control mt-3"
                         placeholder="Insertar Nombre"
                         value={dispName}
                         />
                     <input
-                        onChange={(e)=>{setPhone(e.target.value);
+                        onChange={(e)=>{//setPhone(e.target.value);
                                         setDispPhone(e.target.value)}}
                         className="form-control mt-3"
                         placeholder="Insertar Numero"
                         value={dispPhone}
                         />
                     <input 
-                        onClick={Agendar}
+                        onClick={AgendarCont}
                         type="submit"
                         className="btn btn-dark btn-block mt-3"
                         value={"Agendar"}
                     />
                     {
-                        error ?
+                        error ? //esto es para que si error no existe no muestre nada y si existe muestre lo corerspondiente  su contenido
                         (
-                            <div class="alert alert-danger mt-3" role="alert">
-                                {error}
-                            </div>
+                            
+                                error ==='Agendado' ?
+                                (
+                                    <div className="alert alert-success mt-3" role="alert">
+                                        {successName} ha sido agendado
+                                    </div>
+                                )
+                                :
+                                (
+                                    <div className="alert alert-danger mt-3" role="alert">
+                                    {error}
+                                </div>
+                                )
+                            
                         )
                         :
                         (
-                            <span></span>
+                            <span></span>                  
+                            
                         )
                     }
                 </div>
