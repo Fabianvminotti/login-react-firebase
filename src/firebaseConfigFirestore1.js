@@ -1,7 +1,7 @@
-import firebase from 'firebase'
-import 'firebase/auth'
+import firebase from 'firebase/app'
+import 'firebase/firestore'
 
-const firebaseConfig = {
+const firestoreConfig = {
     apiKey: "AIzaSyBMvJ2cLH2XD6jifsTqFJvJIxL9AoLRS0A",
     authDomain: "pruebareact-9824e.firebaseapp.com",
     projectId: "pruebareact-9824e",
@@ -11,8 +11,8 @@ const firebaseConfig = {
     measurementId: "G-784WQ6S7G1"
   };
   // Initialize Firebase
-  const fire = firebase.initializeApp(firebaseConfig);
+  const fire = firebase.initializeApp(firestoreConfig);
 
-const auth = fire.auth()
+const store = fire.firestore()
 
-export{auth}
+export{store}

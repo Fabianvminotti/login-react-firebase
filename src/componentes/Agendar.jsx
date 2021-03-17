@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { store } from '../firebaseConfig'
 
 
 
@@ -7,6 +8,8 @@ const Agendar = () => {
     const[name, setName] = useState('')
     const[phone,setPhone] = useState('')
     const[error, setError] = useState(null)
+    const[dispName, setDispName] = useState(null)
+    const[dispPhone, setDispPhone] = useState(null)
 
     const Agendar = (e) =>{
         e.preventDefault()
@@ -17,14 +20,11 @@ const Agendar = () => {
         if(phone.trim()==''){
             setError('Por favor ingresar un numero de telefono')
         }
-        // if(phone.trim()!=='' && name.trim()==''){
-        //     setName('')
-        //     setPhone('')
-        // }
+
+        setDispName('')//variable secundaria para mostrar en el display y que se reinicie con el enviar
+        setDispPhone('')//variable secundaria para mostrar en el display y que se reinicie con el enviar   
 
         
-
-
     }
 
     return(
@@ -33,16 +33,18 @@ const Agendar = () => {
                 <div className="col p-5">
                     <h2>Agendar contacto</h2>
                     <input
-                        onChange={(e)=>setName(e.target.value)}
+                        onChange={(e)=>{setName(e.target.value);
+                                        setDispName(e.target.value)}}
                         className="form-control mt-3"
                         placeholder="Insertar Nombre"
-                        value={name}
+                        value={dispName}
                         />
                     <input
-                        onChange={(e)=>setPhone(e.target.value)}
+                        onChange={(e)=>{setPhone(e.target.value);
+                                        setDispPhone(e.target.value)}}
                         className="form-control mt-3"
                         placeholder="Insertar Numero"
-                        value={phone}
+                        value={dispPhone}
                         />
                     <input 
                         onClick={Agendar}
