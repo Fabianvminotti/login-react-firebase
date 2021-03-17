@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {auth} from '../firebaseConfig' //auth es una libreria para registrar ususarios en firebase
-
+import {useHistory} from 'react-router-dom'
 
 const Login = () => {
     const [email, setEmail] = useState('')

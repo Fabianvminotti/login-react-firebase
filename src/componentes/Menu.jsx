@@ -22,7 +22,7 @@ const Menu = () => {
 
 
     return(
-        <div className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div className="navbar navbar-expand-lg navbar-dark bg-dark ">
             <nav>
                 <ul className='navbar-nav mr-auto'>
                     <li className="nav-item">
@@ -34,12 +34,24 @@ const Menu = () => {
                     <li className="nav-item">
                         <Link to='/admin' className='nav-link'>Admin</Link>
                     </li>
+                    {
+                    usuario?
+                    (<li className="nav-item">
+                         <Link to='/agendar' className='nav-link'>Agendar contacto</Link>
+                        
+                        
+                        </li>)
+                    :
+                    (
+                        <span></span>
+                    )
+                }
                 </ul>
                 {
                     usuario?
                     (<button
                         onClick={CerrarSesion}
-                        className="btn btn-danger"
+                        className="d-inline btn btn-danger "
                     >Cerrar sesion</button>)
                     :
                     (
