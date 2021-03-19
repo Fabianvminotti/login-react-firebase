@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { store } from '../firebaseConfig'
 
 
@@ -11,14 +11,23 @@ const Agendar =  () => {
     const[dispName, setDispName] = useState('')
     const[dispPhone, setDispPhone] = useState('')
     const[OKName, setOKName]=useState('')
+    const[userAgendados, getUserAgendados]=useState([])
+    
+
+    useEffect(()=>{
+            const getUsuarios = async()=>{
+                const {docs} = await store.collection('Agenda').get() //await genera un hilo independiente que se ejecuta paralelo al resto de la aplicacion, cuando este termina se almacena en 'docs'
+                const arrayUsuarios = docs.map( item => ({id:item.id,...item.data()}))
+                getUserAgendados(arrayUsuarios)
+            }
+            getUsuarios()
+        },[])
     
 
     const AgendarCont = async (e) =>{
         e.preventDefault()
         setError(null)
-        // setName(dispName) //seteo el name a travez de dispName para que se muestre en el display (dispNAme) y para que el name quede definido de una vez para luego enviarlo a la base de datos externa 
-        setPhone(dispPhone)
-        
+               
         
         if(dispName.trim()===''){
             setError("Ingresar un nombre pro favor")
@@ -39,23 +48,17 @@ const Agendar =  () => {
         try{
             const data = await store.collection('Agenda').add(addUser);
             console.log('tarea completada co exito');
-            console.log(name);
-            console.log(phone);
+            
         }catch(er){
             console.log(er);
         }
-
-
-
-
-
         
         setDispName('')//variable secundaria para mostrar en el display y que se reinicie con el enviar
         setDispPhone('')//variable secundaria para mostrar en el display y que se reinicie con el enviar   
         setOKName(name)
         
-        console.log(name);
         
+                
     }
 
     return(
@@ -112,7 +115,28 @@ const Agendar =  () => {
                 </div>
 
                 <div className="col p-5">
-                    <h2>Contactos Agendados</h2>
+                    <h2>Contactos Agendados</h2><button >Actualizar</button>
+                    {
+                        userAgendados.length!==0 ?
+                        ( 
+                            userAgendados.map(item=>(
+                                <ul className="list-group list-group-horizontal pr-4 ">
+                                    <li className="list-group-item rp-4"  key={item.id}>
+                                        {item.nombre}
+                                    </li>
+                                    <li className="list-group-item"  key={item.id}>
+                                        {item.telefono}
+                                    </li>   
+                                </ul>
+                            ))
+                        )
+                        :
+                        (
+                            <span>
+                                No hay usuarios agendados
+                            </span>
+                        )
+                    }
                 </div>
             </div>
         </div>
